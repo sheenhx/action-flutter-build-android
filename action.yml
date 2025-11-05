@@ -20,6 +20,16 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Cleanup disk space on runner
+      run: |
+        sudo rm -rf /usr/share/dotnet
+        sudo rm -rf /opt/ghc
+        sudo rm -rf "/usr/local/share/boost"
+        sudo docker image prune --all --force
+        sudo apt-get clean
+        df -h
+      shell: bash
+      
     - name: Check java found
       id: check_java
       shell: bash
@@ -58,7 +68,7 @@ runs:
 
     - run: flutter doctor -v
       shell: bash
-      
+
     - name: Setup Android NDK
       uses: nttld/setup-ndk@v1.5.0
       with:
